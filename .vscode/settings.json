@@ -1,0 +1,27 @@
+{
+    "clang-format.executable": "/usr/bin/clang-format",
+    "clang-format.language.cpp.enable": true,
+    "clang-format.language.cpp.style": "file",
+    "clang-format.language.c.enable": true,
+    "clang-format.language.c.style": "file",
+    "clang-include-fixer.binary": "/usr/bin/clang-include-fixer-11",
+
+    "cmake.configureOnOpen": false,
+    
+    "editor.codeActionsOnSave": { "source.fixAll": true },
+    "editor.insertSpaces": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "modifications",
+    "editor.renderWhitespace": "all",
+    "editor.rulers": [80, 100],
+
+    "terminal.integrated.profiles.linux": {
+        "bash": {
+            "path": "bash",
+            "args": [
+                "-i"
+            ],
+            "icon": "terminal-bash"
+        }
+    }
+}

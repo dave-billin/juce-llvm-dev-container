@@ -1,0 +1,70 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.245.2/containers/docker-existing-dockerfile
+{
+    "name": "JUCE LLVM dev container",
+
+    "containerEnv": {
+        // Set JUCE_VERSION to the version/tag/commit of JUCE you want to use
+        "JUCE_VERSION": "7.0.2"
+    },
+
+    "features": {
+        // Expose GUI via a VNC server
+        "desktop-lite": {
+            "password": "vscode",
+            "webPort": "6080",
+            "vncPort": "5901"
+        }
+    },
+
+    // Tell vscode which Dockerfile to use when building the dev container
+    "dockerFile": "Dockerfile-devcontainer",
+
+    // Give vscode information used to build the dev container
+    "build": {
+        "args": {
+            "CONTAINER_USER": "vscode", // Name of the user inside the container
+            "USER_UID": "${localEnv:USER_UID}", // ID of the host system user to mirror in the container
+            "USER_GID": "${localEnv:USER_GID}" // ID of the host system user's group to mirror in the container
+        }
+    },
+
+    // Use 'forwardPorts' to make a list of ports inside the container available locally.
+    // "forwardPorts": [],
+
+    // Uncomment the next line to run commands after the container is created - for example installing curl.
+    "postCreateCommand": "/bin/bash .devcontainer/postCreateCommand.sh --juce-version ${containerEnv:JUCE_VERSION}",
+
+    // Uncomment when using a ptrace-based debugger like C++, Go, and Rust
+    "runArgs": [
+        "--cap-add=SYS_PTRACE",
+        "--security-opt",
+        "seccomp=unconfined"
+    ],
+
+    // Directories to mount inside the container
+    "mounts": [
+        // Mount the user's .ssh directory
+        "type=bind,source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh"
+    ],
+
+    // Non-root account used when running the container
+    "remoteUser": "vscode",
+
+    // Add the IDs of extensions you want installed when the container is created in the array below.
+    // These are some default extension that are useful to have.
+    "extensions": [
+        "betwo.vscode-doxygen-runner",
+        "denniskempin.vscode-include-fixer",
+        "cschlosser.doxdocgen",
+        "davidanson.vscode-markdownlint",
+        "eamodio.gitlens",
+        "llvm-vs-code-extensions.vscode-clangd",
+        "ms-vscode.cmake-tools",
+        "ms-vscode.cpptools",
+        "notskm.clang-tidy",
+        "twxs.cmake",
+        "yzhang.markdown-all-in-one",
+        "xaver.clang-format"
+    ]
+}

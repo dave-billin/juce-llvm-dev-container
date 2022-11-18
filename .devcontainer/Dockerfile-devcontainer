@@ -1,0 +1,106 @@
+FROM linuxcontainers/debian-slim
+MAINTAINER Dave Billin <db77junk@gmail.com>
+
+#####################
+# DOCKER PARAMETERS:
+# CONTAINER_USER the name of a non-root user account to create in the container image
+# USER_UID user ID in the host system given to the CONTAINER_USER account in the container image
+# USER_GID group ID in the host system given to the CONTAINER_USER account in the container image
+
+# Install common packages
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends \
+    apt-transport-https \
+    apt-utils \
+    bash-completion \
+    ca-certificates \
+    curl \
+    gnupg \
+    software-properties-common \
+    sudo \
+    wget \
+    xz-utils \
+  && apt-get -y autoremove \
+  && apt-get -y clean
+
+
+# Install JUCE dependencies
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends \
+    libasound2-dev \
+    libjack-jackd2-dev \
+    ladspa-sdk \
+    libcurl4-openssl-dev \
+    libfreetype6-dev \
+    libx11-dev \
+    libxcomposite-dev \
+    libxcursor-dev \
+    libxext-dev \
+    libxinerama-dev \
+    libxrandr-dev \
+    libxrender-dev \
+    libwebkit2gtk-4.0-dev \
+    libglu1-mesa-dev \
+    mesa-common-dev \
+ && apt-get -y autoremove \
+ && apt-get -y clean
+
+# Install additional development utilities
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends \
+    doxygen \
+    git \
+  && apt-get -y autoremove \
+  && apt-get -y clean
+
+# Install build tools
+COPY ./llvm-15.list /etc/apt/sources.list.d/llvm-14.list
+RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
+  && export DEBIAN_FRONTEND=noninteractive \
+  && apt-get update \
+  && apt-get install -y \
+    cmake \
+    clang-format \
+    clang-tidy \
+    clang-tools \
+    clang clangd \
+    libc++-dev \
+    libc++1 \
+    libc++abi-dev \
+    libc++abi1 \
+    libclang-dev \
+    libclang1 \
+    liblldb-dev \
+    libllvm-ocaml-dev \
+    libomp-dev \
+    libomp5 \
+    lld \
+    lldb \
+    llvm-dev \
+    llvm-runtime \
+    llvm \
+    python3-clang \
+  && apt-get -y autoremove \
+  && apt-get -y clean
+
+ARG CONTAINER_USER
+ARG USER_UID
+ARG USER_GID
+
+# Set up a vscode user that has the same user and group ID as the host environment user
+RUN groupadd --gid $USER_GID $CONTAINER_USER \
+    && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $CONTAINER_USER \
+    && echo $CONTAINER_USER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$CONTAINER_USER\
+    && chmod +x /etc/sudoers.d/$CONTAINER_USER
+
+# Set up git prompt in bash terminal
+COPY git-prompt-bashrc-fragment /tmp/gitprompt
+RUN mkdir -p /home/$CONTAINER_USER/.bash-git \
+    && for f in git-completion.bash git-prompt.sh; do \
+       wget -q -O /home/$CONTAINER_USER/.bash-git/${f} "https://raw.githubusercontent.com/git/git/master/contrib/completion/${f}"; \
+       done \
+    && cat /tmp/gitprompt >>/home/$CONTAINER_USER/.bashrc
+
+USER $CONTAINER_USER
+
+ENTRYPOINT [ "bash" ]
