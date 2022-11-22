@@ -5,51 +5,74 @@
 
     "containerEnv": {
         // Set JUCE_VERSION to the version/tag/commit of JUCE you want to use
-        "JUCE_VERSION": "7.0.2"
-    },
-
-    "features": {
-        // Expose GUI via a VNC server
-        "desktop-lite": {
-            "password": "vscode",
-            "webPort": "6080",
-            "vncPort": "5901"
-        }
+        "JUCE_VERSION": "7.0.2",
+        // Expose the path of the PulseAudio server socket in the container
+        "PULSE_SERVER": "unix:/run/user/${localEnv:CTRUID}/pulse/native",
+        // Expose host X server display ID for running GUI's in the container
+        "DISPLAY": "${localEnv:DISPLAY}"
     },
 
     // Tell vscode which Dockerfile to use when building the dev container
     "dockerFile": "Dockerfile-devcontainer",
 
-    // Give vscode information used to build the dev container
+    "remoteUser": "${localEnv:USER}", // Non-root account used to run the container
+    // Set arguments passed to Docker when building the dev container
     "build": {
         "args": {
-            "CONTAINER_USER": "vscode", // Name of the user inside the container
-            "USER_UID": "${localEnv:USER_UID}", // ID of the host system user to mirror in the container
-            "USER_GID": "${localEnv:USER_GID}" // ID of the host system user's group to mirror in the container
+            "CTRUSER": "${localEnv:USER}", // User account created inside the dev container
+            "CTRUID": "${localEnv:CTRUID}", // User ID to mirror in the container
+            "CTRGID": "${localEnv:CTRGID}" // Group ID to mirror in the container
         }
     },
 
     // Use 'forwardPorts' to make a list of ports inside the container available locally.
     // "forwardPorts": [],
 
-    // Uncomment the next line to run commands after the container is created - for example installing curl.
-    "postCreateCommand": "/bin/bash .devcontainer/postCreateCommand.sh --juce-version ${containerEnv:JUCE_VERSION}",
-
-    // Uncomment when using a ptrace-based debugger like C++, Go, and Rust
+    // Set arguments passed to Docker when running the dev container
     "runArgs": [
+        // Needed to debug with lldb
         "--cap-add=SYS_PTRACE",
+        // Disable security profile restrictions on actions in the container
         "--security-opt",
-        "seccomp=unconfined"
+        "seccomp=unconfined",
+        // Run container on host network to allow access to host X server
+        "--net=host"
     ],
 
     // Directories to mount inside the container
     "mounts": [
         // Mount the user's .ssh directory
-        "type=bind,source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh"
+        {
+            "source": "${localEnv:HOME}",
+            "target": "/home/${localEnv:CTRUID}/.ssh",
+            "type": "bind"
+        },
+        //"type=bind,source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh",
+        // Mount in files and directories for ALSA access
+        { // Mount host ALSA directory in the container
+            "source": "/etc/alsa/",
+            "target": "/etc/alsa/",
+            "type": "bind"
+        },
+        { // Mount host ALSA directory in the container
+            "source": "/usr/share/alsa",
+            "target": "/usr/share/alsa",
+            "type": "bind"
+        },
+        { // Mount host PulseAudio config directory
+            "source": "${localEnv:HOME}/.config/pulse/",
+            "target": "/home/${localEnv:USER}/.config/pulse/",
+            "type": "bind"
+        },
+        { // Mount the PulseAudio server socket in the container
+            "source": "/run/user/${localEnv:CTRUID}/pulse/native",
+            "target": "/run/user/${localEnv:CTRUID}/pulse/native",
+            "type": "bind"
+        }
     ],
 
-    // Non-root account used when running the container
-    "remoteUser": "vscode",
+    // Uncomment the next line to run commands after the container is created - for example installing curl.
+    "postCreateCommand": "/bin/bash .devcontainer/postCreateCommand.sh --juce-version ${containerEnv:JUCE_VERSION}",
 
     // Add the IDs of extensions you want installed when the container is created in the array below.
     // These are some default extension that are useful to have.
@@ -62,6 +85,7 @@
         "llvm-vs-code-extensions.vscode-clangd",
         "ms-vscode.cmake-tools",
         "ms-vscode.cpptools",
+        "ms-vscode.cpptools-extension-pack",
         "notskm.clang-tidy",
         "twxs.cmake",
         "yzhang.markdown-all-in-one",

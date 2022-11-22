@@ -3,9 +3,9 @@ MAINTAINER Dave Billin <db77junk@gmail.com>
 
 #####################
 # DOCKER PARAMETERS:
-# CONTAINER_USER the name of a non-root user account to create in the container image
-# USER_UID user ID in the host system given to the CONTAINER_USER account in the container image
-# USER_GID group ID in the host system given to the CONTAINER_USER account in the container image
+# CTRUSER the name of a non-root user account to create in the container image
+# CTRUID user ID in the host system given to the CTRUSER account in the container image
+# CTRGID group ID in the host system given to the CTRUSER account in the container image
 
 # Install common packages
 RUN apt-get update \
@@ -15,7 +15,9 @@ RUN apt-get update \
     bash-completion \
     ca-certificates \
     curl \
+    gpgv \
     gnupg \
+    openssh-client \
     software-properties-common \
     sudo \
     wget \
@@ -83,24 +85,38 @@ RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
   && apt-get -y autoremove \
   && apt-get -y clean
 
-ARG CONTAINER_USER
-ARG USER_UID
-ARG USER_GID
+# Install PulseAudio packages and Carla VST host from KXStudio repositories
+RUN wget https://launchpad.net/~kxstudio-debian/+archive/kxstudio/+files/kxstudio-repos_11.1.0_all.deb \
+  && dpkg --install kxstudio-repos_11.1.0_all.deb \
+  && rm kxstudio-repos_11.1.0_all.deb \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends \
+    carla \
+    libpulse0 \
+    libasound2 \
+    libasound2-plugins \
+  && apt-get -y autoremove \
+  && apt-get -y clean
+
+# Set up docker args for the container username
+ARG CTRUSER
+ARG CTRUID
+ARG CTRGID
 
 # Set up a vscode user that has the same user and group ID as the host environment user
-RUN groupadd --gid $USER_GID $CONTAINER_USER \
-    && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $CONTAINER_USER \
-    && echo $CONTAINER_USER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$CONTAINER_USER\
-    && chmod +x /etc/sudoers.d/$CONTAINER_USER
+RUN groupadd --gid $CTRGID $CTRUSER \
+    && useradd -s /bin/bash --uid $CTRUID --gid $CTRGID -m $CTRUSER \
+    && echo $CTRUSER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$CTRUSER\
+    && chmod +x /etc/sudoers.d/$CTRUSER
 
-# Set up git prompt in bash terminal
+# Set up git prompt in the container's bash terminal
 COPY git-prompt-bashrc-fragment /tmp/gitprompt
-RUN mkdir -p /home/$CONTAINER_USER/.bash-git \
+RUN mkdir -p /home/$CTRUSER/.bash-git \
     && for f in git-completion.bash git-prompt.sh; do \
-       wget -q -O /home/$CONTAINER_USER/.bash-git/${f} "https://raw.githubusercontent.com/git/git/master/contrib/completion/${f}"; \
+       wget -q -O /home/$CTRUSER/.bash-git/${f} "https://raw.githubusercontent.com/git/git/master/contrib/completion/${f}"; \
        done \
-    && cat /tmp/gitprompt >>/home/$CONTAINER_USER/.bashrc
+    && cat /tmp/gitprompt >>/home/$CTRUSER/.bashrc
 
-USER $CONTAINER_USER
+USER $CTRUSER
 
 ENTRYPOINT [ "bash" ]
