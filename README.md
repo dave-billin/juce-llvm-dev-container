@@ -43,20 +43,25 @@ Code by pressing `Ctrl+Shift+B`.  These tasks configure and build code in the re
 
 | Build Task | Description |
 |:-----------|:------------|
-| Build all examples   | Configures CMake and builds all examples |
-| Configure CMake      | Configures the build using CMake |
-| Build JUCE stand-alone plugin example | Builds the stand-alone plugin example |
-| Build JUCE GUI example | Builds the GUI example |
-| Delete build directory | Deletes the `build/` directory (useful for ensuring a clean build) |
+| Build all examples         | Configures CMake and builds all examples |
+| Build audio plugin example | Builds the stand-alone plugin example |
+| Build GUI example          | Builds the GUI example |
+| Build JUCE utilities       | Builds JUCE utilities like the Projucer, AudioPluginHost, and BinaryBuilder |
+| Build all JUCE demos       | Builds all the demos that ship with the JUCE library |
+| Delete build directory     | Deletes the `build/` directory (useful for ensuring a clean build) |
+| Configure CMake            | Configures the build using CMake (useful when making CMake changes) |
 
 Additionally, the following tasks are defined in [.vscode/tasks.json](./.vscode/tasks.json) for
-running the example projects.  These can be accessed by pressing `Ctrl+Shift+P`, typing/selecting
-the *Tasks: Run Task* option, then clicking on the task to run:
+running example projects and JUCE utilities after they have been built.  These can be accessed by
+pressing `Ctrl+Shift+P`, typing/selecting the `*Tasks: Run Task*` option, then clicking on the
+desired "Run XXXX..." task:
 
 | Task | Description |
 |:-----------|:------------|
-| Run GUI example                | Runs the GUI example executable |
-| Run stand-alone plugin example | Runs the stand-alone plugin example executable |
+| Run GUI example             | Runs the GUI example built from repo sources |
+| Run audio plugin example    | Runs the audio plugin example built from repo sources (in stand-alone mode) |
+| Run the Projucer            | Runs the Projucer utility supplied with the JUCE library |
+| Run JUCE Audio Plugin Host  | Runs the JUCE audio plugin host supplied with the JUCE library |
 
 ## Authors
 
@@ -67,10 +72,6 @@ Dave Billin
 * 0.1
   * Initial pre-release
 
-## License
-
-This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
-
 ## Acknowledgments
 
 The following websites provided useful background and examples for creating the JUCE dev container
@@ -80,4 +81,5 @@ The following websites provided useful background and examples for creating the 
 * [An Introduction to Modern CMake](https://cliutils.gitlab.io/modern-cmake/)
 * [Sudara's blog on building JUCE with CMake](https://melatonin.dev/blog/how-to-use-cmake-with-juce/)
 * [Vscode Dev Container Metadata Reference](https://containers.dev/implementors/json_reference/)
+* [The JUCE CMake API](https://github.com/juce-framework/JUCE/blob/master/docs/CMake%20API.md)
 * [The JUCE Library Tutorials](https://juce.com/learn/tutorials)

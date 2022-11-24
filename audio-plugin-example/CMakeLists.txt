@@ -1,6 +1,6 @@
-set(JUCEAPP_TARGET "standalone-plugin-example")
+set(PLUGIN_TARGET "audio-plugin-example")
 
-juce_add_plugin(${JUCEAPP_TARGET}
+juce_add_plugin(${PLUGIN_TARGET}
 # VERSION ...                               # Set this if the plugin version is different to the project version
 # ICON_BIG ...                              # ICON_* arguments specify a path to an image file to use as an icon for the Standalone
 # ICON_SMALL ...
@@ -14,8 +14,8 @@ juce_add_plugin(${JUCEAPP_TARGET}
 PLUGIN_MANUFACTURER_CODE Juce               # A four-character manufacturer id with at least one upper-case character
 PLUGIN_CODE Dem0                            # A unique four-character plugin id with exactly one upper-case character
                                             # GarageBand 10.3 requires the first letter to be upper-case, and the remaining letters to be lower-case
-FORMATS Standalone # VST3                   # The formats to build. Other valid formats are: AAX Unity VST AU AUv3
-PRODUCT_NAME "${JUCEAPP_TARGET}"            # The name of the final executable, which can differ from the target name
+FORMATS Standalone VST3                     # The formats to build. Other valid formats are: AAX Unity VST AU AUv3
+PRODUCT_NAME "${PLUGIN_TARGET}"             # The name of the final executable, which can differ from the target name
 )
 
 # `juce_generate_juce_header` will create a JuceHeader.h for a given target, which will be generated
@@ -31,7 +31,7 @@ PRODUCT_NAME "${JUCEAPP_TARGET}"            # The name of the final executable, 
 # Finally, we supply a list of source files that will be built into the target. This is a standard
 # CMake command.
 
-target_sources(${JUCEAPP_TARGET}
+target_sources(${PLUGIN_TARGET}
     PRIVATE
         PluginEditor.cpp
         PluginProcessor.cpp)
@@ -43,7 +43,7 @@ target_sources(${JUCEAPP_TARGET}
 # definitions will be visible both to your code, and also the JUCE module code, so for new
 # definitions, pick unique names that are unlikely to collide! This is a standard CMake command.
 
-target_compile_definitions(${JUCEAPP_TARGET}
+target_compile_definitions(${PLUGIN_TARGET}
     PUBLIC
         # JUCE_WEB_BROWSER and JUCE_USE_CURL would be on by default, but you might not need them.
         JUCE_WEB_BROWSER=0  # If you remove this, add `NEEDS_WEB_BROWSER TRUE` to the `juce_add_plugin` call
@@ -65,11 +65,18 @@ target_compile_definitions(${JUCEAPP_TARGET}
 # linked automatically. If we'd generated a binary data target above, we would need to link to it
 # here too. This is a standard CMake command.
 
-target_link_libraries(${JUCEAPP_TARGET}
+target_link_libraries(${PLUGIN_TARGET}
     PRIVATE
         # AudioPluginData           # If we'd created a binary data target, we'd link to it here
         juce::juce_audio_utils
     PUBLIC
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags
-        juce::juce_recommended_warning_flags)
+        juce::juce_recommended_warning_flags
+)
+
+# NOTE: Binaries produced by this example are written to the following locations:
+#  Standalone Audio Plugin (executable):
+#   <BUILD_DIR>/audio-plugin-example/audio-plugin-example_artefacts/Standalone/audio-plugin-example
+#  VST3 Audio Plugin (shared library):
+#   <BUILD_DIR>/audio-plugin-example/audio-plugin-example_artefacts/VST3/audio-plugin-example.vst3/Contents/x86_64-linux/audio-plugin-example.so
