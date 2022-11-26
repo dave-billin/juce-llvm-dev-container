@@ -1,11 +1,12 @@
-FROM linuxcontainers/debian-slim
+FROM ubuntu:22.04
 MAINTAINER Dave Billin <db77junk@gmail.com>
 
 #####################
 # DOCKER PARAMETERS:
-# CTRUSER the name of a non-root user account to create in the container image
 # CTRUID user ID in the host system given to the CTRUSER account in the container image
 # CTRGID group ID in the host system given to the CTRUSER account in the container image
+# CTRUSER the name of a non-root user account to create in the container image
+# LLVM_VERSION Version of LLVM tools to install (e.g. 15)
 
 # Install common packages
 RUN apt-get update \
@@ -17,6 +18,7 @@ RUN apt-get update \
     curl \
     gpgv \
     gnupg \
+    less \
     openssh-client \
     software-properties-common \
     sudo \
@@ -47,44 +49,6 @@ RUN apt-get update \
  && apt-get -y autoremove \
  && apt-get -y clean
 
-# Install additional development utilities
-RUN apt-get update \
-  && apt-get install -y --no-install-recommends \
-    doxygen \
-    git \
-  && apt-get -y autoremove \
-  && apt-get -y clean
-
-# Install build tools
-COPY ./llvm-15.list /etc/apt/sources.list.d/llvm-14.list
-RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
-  && export DEBIAN_FRONTEND=noninteractive \
-  && apt-get update \
-  && apt-get install -y \
-    cmake \
-    clang-format \
-    clang-tidy \
-    clang-tools \
-    clang clangd \
-    libc++-dev \
-    libc++1 \
-    libc++abi-dev \
-    libc++abi1 \
-    libclang-dev \
-    libclang1 \
-    liblldb-dev \
-    libllvm-ocaml-dev \
-    libomp-dev \
-    libomp5 \
-    lld \
-    lldb \
-    llvm-dev \
-    llvm-runtime \
-    llvm \
-    python3-clang \
-  && apt-get -y autoremove \
-  && apt-get -y clean
-
 # Install PulseAudio packages and Carla VST host from KXStudio repositories
 RUN wget https://launchpad.net/~kxstudio-debian/+archive/kxstudio/+files/kxstudio-repos_11.1.0_all.deb \
   && dpkg --install kxstudio-repos_11.1.0_all.deb \
@@ -98,7 +62,57 @@ RUN wget https://launchpad.net/~kxstudio-debian/+archive/kxstudio/+files/kxstudi
   && apt-get -y autoremove \
   && apt-get -y clean
 
-# Set up docker args for the container username
+# Install additional development utilities
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends \
+    build-essential \
+    cmake \
+    doxygen \
+    git \
+  && apt-get -y autoremove \
+  && apt-get -y clean
+
+# NOTE: the version defined here must match the llvm-NN.list file in the .devcontainer directory
+ARG LLVM_VERSION=15
+
+# Install the LLVM toolchain and add symlinks to LLVM utilities
+RUN wget -O llvm.sh https://apt.llvm.org/llvm.sh \
+  && chmod +x llvm.sh \
+  && ./llvm.sh ${LLVM_VERSION} all \
+  && rm -f llvm.sh \
+  && update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++-$LLVM_VERSION 60 \
+  && update-alternatives --install /usr/bin/cpp cpp /usr/bin/clang-cpp-$LLVM_VERSION 60 \
+  && update-alternatives --install /usr/bin/cc cc /usr/bin/clang-cl-$LLVM_VERSION 60 \
+  && for u in clang-cl \
+              clang \
+              clang-apply-replacements \
+              clang-change-namespace \
+              clang-check \
+              clang-extdef-mapping \
+              clang-format \
+              clang-format-diff \
+              clang-include-fixer \
+              clang-linker-wrapper \
+              clang-move clang-move \
+              clang-nvlink-wrapper \
+              clang-offload-bundler \
+              clang-offload-packager \
+              clang-offload-wrapper \
+              clang-pseudo \
+              clang-query \
+              clang-refactor \
+              clang-rename \
+              clang-reorder-fields \
+              clang-repl \
+              clang-scan-deps \
+              clang-tidy \
+              clang-tidy-diff \
+              clangd \
+    ; do \
+      update-alternatives --install /usr/bin/${u} ${u} /usr/bin/${u}-$LLVM_VERSION 60; \
+      done
+
+# Set up a sudo-capable user account in the container mapped to the host user's ID and group
 ARG CTRUSER
 ARG CTRUID
 ARG CTRGID

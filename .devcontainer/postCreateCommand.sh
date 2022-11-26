@@ -36,4 +36,4 @@ done
 
 # Set the branch/commit/tag in the JUCE library source tree
 git submodule update --init --recursive
-(cd JUCE && git checkout ${JUCE_LIBRARY_VERSION})
+(cd ThirdParty/JUCE && git checkout ${JUCE_LIBRARY_VERSION})

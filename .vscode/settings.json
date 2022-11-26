@@ -1,12 +1,20 @@
 {
-    "clang-format.executable": "/usr/bin/clang-format",
+    "clangd.path": "/usr/bin/clangd-15",
+    "clang-format.executable": "/usr/bin/clang-format-15",
     "clang-format.language.cpp.enable": true,
     "clang-format.language.cpp.style": "file",
     "clang-format.language.c.enable": true,
     "clang-format.language.c.style": "file",
-    "clang-include-fixer.binary": "/usr/bin/clang-include-fixer-11",
+    "clang-include-fixer.binary": "/usr/bin/clang-include-fixer-15",
+    "clang-tidy.executable": "/usr/bin/clang-tidy-15",
+    "clang-tidy.buildPath": "${workspaceFolder}/build",
+    "C_Cpp.clang_format_path": "/usr/bin/clang-format-15",
+    "C_Cpp.clang_format_style": "file",
+    "C_Cpp.clang_format_fallbackStyle": "Mozilla",
+    "C_Cpp.codeAnalysis.clangTidy.path": "/usr/bin/clang-tidy-15",
 
     "cmake.configureOnOpen": false,
+    "cmake.configureOnEdit": false,
     
     "editor.codeActionsOnSave": { "source.fixAll": true },
     "editor.insertSpaces": true,

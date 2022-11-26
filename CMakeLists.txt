@@ -4,10 +4,6 @@ cmake_minimum_required(VERSION 3.16)
 # This cannot have spaces (but PRODUCT_NAME can)
 set(PROJECT_NAME "Example JUCE Apps")
 
-# Set the plugin formats you'll be building here.
-# Valid formats: AAX Unity VST AU AUv3 Standalone
-#set(FORMATS AU VST3 AUv3)
-
 # Reads in VERSION file and sticks in it CURRENT_VERSION variable
 # Be sure the file has no newlines
 file(STRINGS VERSION CURRENT_VERSION)
@@ -26,20 +22,6 @@ set(THIRDPARTY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty")
 # Create a /Modules directory in the IDE with the JUCE Module code
 option(JUCE_ENABLE_MODULE_SOURCE_GROUPS "Show all module sources in IDE projects" ON)
 
-# Build the VST3 SDK
-# set(VST3SDK_DIR "${THIRDPARTY_DIR}/vst3sdk")
-# ExternalProject_Add(googletest
-#     DOWNLOAD_COMMAND ""
-#     SOURCE_DIR "${VST3SDK_DIR}"
-#     BINARY_DIR "${CMAKE_BINARY_DIR}/vst3sdk"
-#     CONFIGURE_COMMAND "${CMAKE_COMMAND}" -S "${VST3SDK_DIR}" -G "${CMAKE_GENERATOR}" 
-#                         "-DSMTG_ADD_VST3_PLUGINS_SAMPLES=OFF"
-#                         "-DSMTG_ADD_VSTGUI=OFF"
-#     BUILD_COMMAND "${CMAKE_COMMAND}" --build .
-#     INSTALL_COMMAND ""
-#     TEST_COMMAND ""
-# )
-
 #-------------------------------
 # Set up JUCE options
 #-------------------------------
@@ -53,6 +35,8 @@ set(JUCE_BUILD_EXAMPLES ON) # Enable building JUCE examples
 add_subdirectory("${THIRDPARTY_DIR}/JUCE")
 juce_set_vst2_sdk_path("") # "${THIRDPARTY_DIR}/vst3sdk") # Tell JUCE where to find the VST SDK
 
+# Build the GUI example provided in this repo
 add_subdirectory(GUI-example)
-add_subdirectory(audio-plugin-example)
 
+# Build the plugin example provided in this repo
+add_subdirectory(audio-plugin-example)
