@@ -83,17 +83,20 @@ RUN wget -O llvm.sh https://apt.llvm.org/llvm.sh \
   && update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++-$LLVM_VERSION 60 \
   && update-alternatives --install /usr/bin/cpp cpp /usr/bin/clang-cpp-$LLVM_VERSION 60 \
   && update-alternatives --install /usr/bin/cc cc /usr/bin/clang-cl-$LLVM_VERSION 60 \
-  && for u in clang-cl \
+  && for u in clang++ \
               clang \
               clang-apply-replacements \
               clang-change-namespace \
               clang-check \
+              clang-cl \
+              clang-cpp \
+              clang-doc \
               clang-extdef-mapping \
               clang-format \
               clang-format-diff \
               clang-include-fixer \
               clang-linker-wrapper \
-              clang-move clang-move \
+              clang-move \
               clang-nvlink-wrapper \
               clang-offload-bundler \
               clang-offload-packager \
@@ -106,8 +109,12 @@ RUN wget -O llvm.sh https://apt.llvm.org/llvm.sh \
               clang-repl \
               clang-scan-deps \
               clang-tidy \
-              clang-tidy-diff \
               clangd \
+              lldb \
+              lldb-argdumper \
+              lldb-instr \
+              lldb-server \
+              lldb-vscode \
     ; do \
       update-alternatives --install /usr/bin/${u} ${u} /usr/bin/${u}-$LLVM_VERSION 60; \
       done

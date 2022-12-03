@@ -247,6 +247,9 @@
         "type": "process",
         "label": "Run the Projucer",
         "command": "${workspaceFolder}/build/ThirdParty/JUCE/extras/Projucer/Projucer_artefacts/Projucer",
+        "options": {
+            "cwd": "${workspaceFolder}"
+        },
         "group": {
             "kind": "none",
             "isDefault": false
