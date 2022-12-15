@@ -21,6 +21,15 @@ A Linux host environment (e.g. Ubuntu or similar variant) with:
 * [Docker](https://docs.docker.com/desktop/install/linux-install/)
 * [Visual Studio Code](https://code.visualstudio.com/) with the
   [Remote Development Extension Pack](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack)
+* The following environment variables set:
+```bash
+$> export CTRUSER=...   # "vscode", for example
+$> export CTRUID=...    # "1000", for example
+$> export CTRGID=...    # "1000", for example
+$> export USER=...      # "jdoe", for example
+$> export HOME=...      # "/home/jdoe", for example
+$> export DISPLAY=...   # "127.0.0.1:0.0", for example
+```
 
 ### Building The Dev Container
 
