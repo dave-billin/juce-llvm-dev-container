@@ -24,6 +24,19 @@ A Linux host environment (e.g. Ubuntu or similar variant) with:
 
 ### Building The Dev Container
 
+When building the dev container, the following environment variables must be set in the host to
+provide vscode with information necessary to mirror user and group ownership inside the container.
+This is done to ensure that files are accessible both inside and outside the dev container.
+
+| Variable | Value |
+|:---------|:------|
+| CTRUSER | Username of the developer in the host environment |
+| CTRUID  | User ID of the developer in the host environment  |
+| CTRGID  | Group ID of the developer in the host environment |
+
+#### Steps To Build The Container
+
+* Set/export required environment variables in the host shell or user profile (e.g. `~/.bashrc`).
 * Open Visual Studio Code in the base directory of this repository.
 * When prompted in vscode (or after pressing `Ctrl+Shift+P`), select "Reopen in Container".  Then,
   relax for a few minutes while the dev container image is built (NOTE: this long image build

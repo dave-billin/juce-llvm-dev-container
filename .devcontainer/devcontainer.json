@@ -3,6 +3,8 @@
 {
     "name": "JUCE LLVM dev container",
 
+    "userEnvProbe": "interactiveShell",
+    
     "containerEnv": {
         // Set JUCE_VERSION to the version/tag/commit of JUCE you want to use
         "JUCE_VERSION": "7.0.2",
@@ -16,10 +18,11 @@
     "dockerFile": "Dockerfile-devcontainer",
 
     "remoteUser": "${localEnv:USER}", // Non-root account used to run the container
+
     // Set arguments passed to Docker when building the dev container
     "build": {
         "args": {
-            "CTRUSER": "${localEnv:USER}", // User account created inside the dev container
+            "CTRUSER": "${localEnv:CTRUSER}", // User account created inside the dev container
             "CTRUID": "${localEnv:CTRUID}", // User ID to mirror in the container
             "CTRGID": "${localEnv:CTRGID}" // Group ID to mirror in the container
         }

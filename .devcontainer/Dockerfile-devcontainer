@@ -124,6 +124,12 @@ ARG CTRUSER
 ARG CTRUID
 ARG CTRGID
 
+# Verify that all required build arguments have been provided
+RUN if [ -z "$CTRUSER" ]; then echo "The build argument CTRUSER is not set" >&2 && false; \
+    elif [ -z "$CTRUID" ]; then echo "The build argument CTRUID is not set" >&2 && false; \
+    elif [ -z "$CTRGID" ]; then echo "The build argument CTRGID is not set" >&2 && false; \
+    fi
+
 # Set up a vscode user that has the same user and group ID as the host environment user
 RUN groupadd --gid $CTRGID $CTRUSER \
     && useradd -s /bin/bash --uid $CTRUID --gid $CTRGID -m $CTRUSER \
