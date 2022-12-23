@@ -1,261 +1,238 @@
 {
-  // See https://go.microsoft.com/fwlink/?LinkId=733558
-  // for the documentation about the tasks.json format
-  "version": "2.0.0",
-  "tasks": [
-    {
-        "type": "shell",
-        "label": "Configure CMake",
-        "command": "/usr/bin/cmake",
-        "args": [
-            "-S",
-            "${workspaceFolder}",
-            "-B",
-            "${workspaceFolder}/build"
-        ],
-        "options": {
-            "cwd": "${workspaceFolder}"
-        },
-        "problemMatcher": "$gcc",
-        "presentation": {
-            "echo": true,
-            "reveal": "always",
-            "focus": false,
-            "panel": "shared",
-            "showReuseMessage": true,
-            "clear": true
-        },
-        "group": {
-            "kind": "build",
-            "isDefault": false
-        },
-    },
-    {
-        "type": "shell",
-        "label": "Pre-configure",
-        "command": "stat ${workspaceFolder}/build/CMakeCache.txt || /usr/bin/cmake -S ${workspaceFolder} -B ${workspaceFolder}/build",
-        "options": {
-            "cwd": "${workspaceFolder}"
-        },
-        "problemMatcher": "$gcc",
-        "presentation": {
-            "echo": false,
-            "reveal": "always",
-            "focus": false,
-            "panel": "shared",
-            "showReuseMessage": false,
-            "clear": false
-        },
-        "group": {
-            "kind": "build",
-            "isDefault": false
-        },
-    },
-    {
-        "type": "shell",
-        "label": "Build GUI example",
-        "command": "/usr/bin/cmake",
-        "args": [
-            "--build",
-            "${workspaceFolder}/build",
-            "--target",
-            "gui-example",
-            "--parallel",
-            "$(nproc)"
-        ],
-        "options": {
-            "cwd": "${workspaceFolder}",
-        },
-        "dependsOn": [
-            "Pre-configure"
-        ],
-        "dependsOrder": "sequence",
-        "problemMatcher": "$gcc",
-        "presentation": {
-            "echo": true,
-            "reveal": "always",
-            "focus": false,
-            "panel": "shared",
-            "showReuseMessage": true,
-            "clear": true
-        },
-        "group": {
-            "kind": "build",
-            "isDefault": false
-        },
-    },
-    {
-        "type": "shell",
-        "label": "Build audio plugin example",
-        "command": "/usr/bin/cmake",
-        "args": [
-            "--build",
-            "${workspaceFolder}/build",
-            "--target",
-            "audio-plugin-example_All",
-            "--parallel",
-            "$(nproc)"
-        ],
-        "options": {
-            "cwd": "${workspaceFolder}",
-        },
-        "dependsOn": [
-            "Pre-configure"
-        ],
-        "dependsOrder": "sequence",
-        "problemMatcher": "$gcc",
-        "presentation": {
-            "echo": true,
-            "reveal": "always",
-            "focus": false,
-            "panel": "shared",
-            "showReuseMessage": true,
-            "clear": true
-        },
-        "group": {
-            "kind": "build",
-            "isDefault": false
-        },
-    },
-    {
-        "type": "shell",
-        "label": "Build all examples",
-        "command": "echo",
-        "args": [],
-        "options": {
-            "cwd": "${workspaceFolder}"
-        },
-        "dependsOn": [
-            "Pre-configure",
-            "Build GUI example",
-            "Build audio plugin example",
-        ],
-        "dependsOrder": "sequence",
-        "problemMatcher": "$gcc",
-        "presentation": {
-            "echo": true,
-            "reveal": "always",
-            "focus": false,
-            "panel": "shared",
-            "showReuseMessage": true,
-            "clear": true
-        },
-        "group": {
-            "kind": "build",
-            "isDefault": false
-        },
-    },
-    {
-        "type": "shell",
-        "label": "Build JUCE utilities",
-        "command": "/usr/bin/cmake",
-        "args": [
-            "--build",
-            "${workspaceFolder}/build",
-            "--parallel",
-            "$(nproc)",
-            "--target",
-            "BinaryBuilder",
-            "--target",
-            "Projucer",
-            "--target",
+   // See https://go.microsoft.com/fwlink/?LinkId=733558
+   // for the documentation about the tasks.json format
+   "version": "2.0.0",
+   "tasks": [
+      {
+         "type": "cmake",
+         "label": "Configure CMake",
+         "command": "configure",
+         "targets": [],
+         "group": "build",
+         "problemMatcher": [],
+         "detail": "Configure the project build using CMake"
+      },
+      {
+         "type": "cmake",
+         "label": "Build examples",
+         "command": "build",
+         "targets": [
+            "audio-plugin-example",
+            "gui-example"
+         ],
+         "group": "build",
+         "problemMatcher": [
+            "$gcc"
+         ],
+         "detail": "Build the example audio plugin and GUI applications"
+      },
+      {
+         "type": "cmake",
+         "label": "Build audio plugin example",
+         "command": "build",
+         "targets": [
+            "audio-plugin-example_All"
+         ],
+         "group": "build",
+         "problemMatcher": [
+            "$gcc"
+         ],
+         "detail": "Build the example audio plugin application under audio-plugin-example/"
+      },
+      {
+         "type": "cmake",
+         "label": "Build GUI example",
+         "command": "build",
+         "targets": [
+            "gui-example"
+         ],
+         "group": "build",
+         "problemMatcher": [
+            "$gcc"
+         ],
+         "detail": "Build the example GUI application under GUI-example/"
+      },
+      {
+         "type": "cmake",
+         "label": "Build the JUCE BinaryBuilder",
+         "command": "build",
+         "targets": [
+            "BinaryBuilder"
+         ],
+         "group": "build",
+         "problemMatcher": [
+            "$gcc"
+         ],
+         "detail": "Build the JUCE BinaryBuilder utility"
+      },
+      {
+         "type": "cmake",
+         "label": "Build the JUCE Audio Plugin Host",
+         "command": "build",
+         "targets": [
             "AudioPluginHost"
-        ],
-        "options": {
-            "cwd": "${workspaceFolder}"
-        },
-        "dependsOn": [
-            "Pre-configure"
-        ],
-        "dependsOrder": "sequence",
-        "problemMatcher": "$gcc",
-        "presentation": {
-            "echo": true,
-            "reveal": "always",
-            "focus": false,
-            "panel": "shared",
-            "showReuseMessage": true,
-            "clear": true
-        },
-        "group": {
-            "kind": "build",
-            "isDefault": false
-        },
-    },
-    {
-        "type": "shell",
-        "label": "Build all JUCE demos",
-        "command": "TARGETS=\"$(make help | grep -i demo | cut -d' ' -f2)\" make -j $(nproc) ${TARGETS}",
-        "options": {
-            "cwd": "${workspaceFolder}/build"
-        },
-        "dependsOn": [
-            "Pre-configure"
-        ],
-        "dependsOrder": "sequence",
-        "problemMatcher": "$gcc",
-        "presentation": {
-            "echo": true,
-            "reveal": "always",
-            "focus": false,
-            "panel": "shared",
-            "showReuseMessage": true,
-            "clear": true
-        },
-        "group": {
-            "kind": "build",
-            "isDefault": false
-        },
-    },
-    {
-        "type": "shell",
-        "label": "C/C++: clang++ build active file",
-        "command": "/usr/bin/clang++",
-        "args": [
+         ],
+         "group": "build",
+         "problemMatcher": [
+            "$gcc"
+         ],
+         "detail": "Build the JUCE Audio Plugin Host utility"
+      },
+      {
+         "type": "cmake",
+         "label": "Build the Projucer",
+         "command": "build",
+         "targets": [
+            "Projucer"
+         ],
+         "group": "build",
+         "problemMatcher": [
+            "$gcc"
+         ],
+         "detail": "Build the Projucer utility"
+      },
+      {
+         "type": "cmake",
+         "label": "Build JUCE utilities",
+         "command": "build",
+         "targets": [
+            "BinaryBuilder",
+            "Projucer",
+            "AudioPluginHost"
+         ],
+         "group": "build",
+         "problemMatcher": [
+            "$gcc"
+         ],
+         "detail": "Build JUCE utilities (Projucer, AudioPluginHost, BinaryBuilder, etc."
+      },
+      {
+         "type": "cmake",
+         "label": "Build all JUCE demos",
+         "command": "build",
+         // Demo targets can be listed by running the following command under the build/ directory
+         // after configuring CMake:
+         //   ninja -t targets all | sed -nr 's/^([[:alnum:]]+Demo):.*/\1/p'
+         "targets": [
+            "AccessibilityDemo",
+            "AnalyticsCollectionDemo",
+            "AnimationAppDemo",
+            "AnimationDemo",
+            "AudioAppDemo",
+            "AudioLatencyDemo",
+            "AudioPlaybackDemo",
+            "AudioPluginDemo",
+            "AudioRecordingDemo",
+            "AudioSettingsDemo",
+            "AudioSynthesiserDemo",
+            "BouncingBallWavetableDemo",
+            "Box2DDemo",
+            "ChildProcessDemo",
+            "CodeEditorDemo",
+            "ComponentDemo",
+            "ComponentTransformsDemo",
+            "ConvolutionDemo",
+            "CryptographyDemo",
+            "DSPModulePluginDemo",
+            "DialogsDemo",
+            "FIRFilterDemo",
+            "FlexBoxDemo",
+            "FontsDemo",
+            "GainDemo",
+            "GraphicsDemo",
+            "GridDemo",
+            "HelloWorldDemo",
+            "HostPluginDemo",
+            "IIRFilterDemo",
+            "ImagesDemo",
+            "InAppPurchasesDemo",
+            "JavaScriptDemo",
+            "KeyMappingsDemo",
+            "LiveConstantDemo",
+            "LookAndFeelDemo",
+            "MDIDemo",
+            "MPEDemo",
+            "MenusDemo",
+            "MidiDemo",
+            "MultiTouchDemo",
+            "MultithreadingDemo",
+            "NetworkGraphicsDemo",
+            "NetworkingDemo",
+            "OSCDemo",
+            "OpenGLAppDemo",
+            "OpenGLDemo",
+            "OscillatorDemo",
+            "OverdriveDemo",
+            "PluckedStringsDemo",
+            "PropertiesDemo",
+            "SIMDRegisterDemo",
+            "SimpleFFTDemo",
+            "StateVariableFilterDemo",
+            "SystemInfoDemo",
+            "TimersAndEventsDemo",
+            "UnitTestsDemo",
+            "ValueTreesDemo",
+            "WaveShaperTanhDemo",
+            "WebBrowserDemo",
+            "WidgetsDemo",
+            "WindowsDemo",
+            "XMLandJSONDemo",
+         ],
+         "group": "build",
+         "problemMatcher": [
+            "$gcc"
+         ],
+         "detail": "Build all demo applications supplied with the JUCE library"
+      },
+      {
+         "type": "shell",
+         "label": "C/C++: clang++ build active file",
+         "command": "/usr/bin/clang++",
+         "args": [
             "-std=c++17",
             "-stdlib=libc++",
             "-g",
             "${file}",
             "-o",
             "${fileDirname}/${fileBasenameNoExtension}"
-        ],
-        "options": {
+         ],
+         "options": {
             "cwd": "${workspaceFolder}"
-        },
-        "problemMatcher": [
+         },
+         "problemMatcher": [
             "$gcc"
-        ],
-        "group": {
+         ],
+         "group": {
             "kind": "build",
             "isDefault": false
-        },
-    },
-    {
-        "type": "process",
-        "label": "Delete build directory",
-        "command": "/bin/rm",
-        "args": [
+         },
+      },
+      {
+         "type": "process",
+         "label": "Delete build directory",
+         "command": "/bin/rm",
+         "args": [
             "-rf",
             "${workspaceFolder}/build"
-        ],
-        "group": {
+         ],
+         "group": {
             "kind": "build",
             "isDefault": false
-        },
-    },
-    {
-        "type": "process",
-        "label": "Run the Projucer",
-        "command": "${workspaceFolder}/build/ThirdParty/JUCE/extras/Projucer/Projucer_artefacts/Projucer",
-        "options": {
+         },
+      },
+      {
+         "type": "shell",
+         "label": "Run the Projucer",
+         "command": "$(find build/ -type f -name Projucer)",
+         "options": {
             "cwd": "${workspaceFolder}"
-        },
-        "group": {
+         },
+         "group": {
             "kind": "none",
             "isDefault": false
-        },
-        "problemMatcher": [],
-        "presentation": {
+         },
+         "problemMatcher": [],
+         "presentation": {
             "echo": false,
             "reveal": "silent",
             "focus": false,
@@ -263,19 +240,19 @@
             "showReuseMessage": false,
             "clear": false,
             "close": true
-        },
-        "detail": "Runs the Projucer utility supplied with JUCE"
-    },
-    {
-        "type": "process",
-        "label": "Run JUCE Audio Plugin Host",
-        "command": "${workspaceFolder}/build/ThirdParty/JUCE/extras/AudioPluginHost/AudioPluginHost_artefacts/AudioPluginHost",
-        "group": {
+         },
+         "detail": "Runs the Projucer utility supplied with the JUCE library"
+      },
+      {
+         "type": "process",
+         "label": "Run the JUCE Audio Plugin Host",
+         "command": "${workspaceFolder}/build/ThirdParty/JUCE/extras/AudioPluginHost/AudioPluginHost_artefacts/AudioPluginHost",
+         "group": {
             "kind": "none",
             "isDefault": false
-        },
-        "problemMatcher": [],
-        "presentation": {
+         },
+         "problemMatcher": [],
+         "presentation": {
             "echo": false,
             "reveal": "silent",
             "focus": false,
@@ -283,19 +260,19 @@
             "showReuseMessage": false,
             "clear": false,
             "close": true
-        },
-        "detail": "Run the audio plugin host supplied with JUCE"
-    },
-    {
-        "type": "process",
-        "label": "Run GUI example",
-        "command": "${workspaceFolder}/build/GUI-example/gui-example_artefacts/gui-example",
-        "group": {
+         },
+         "detail": "Run the audio plugin host supplied with the JUCE library"
+      },
+      {
+         "type": "process",
+         "label": "Run the audio-plugin-example application",
+         "command": "${workspaceFolder}/build/audio-plugin-example/audio-plugin-example_artefacts/Debug/Standalone/audio-plugin-example",
+         "group": {
             "kind": "none",
             "isDefault": false
-        },
-        "problemMatcher": [],
-        "presentation": {
+         },
+         "problemMatcher": [],
+         "presentation": {
             "echo": false,
             "reveal": "silent",
             "focus": false,
@@ -303,18 +280,18 @@
             "showReuseMessage": false,
             "clear": false,
             "close": true
-        }
-    },
-    {
-        "type": "process",
-        "label": "Run audio plugin example",
-        "command": "${workspaceFolder}/build/audio-plugin-example/audio-plugin-example_artefacts/Standalone/audio-plugin-example",
-        "group": {
+         }
+      },
+      {
+         "type": "process",
+         "label": "Run the gui-example application",
+         "command": "${workspaceFolder}/build/GUI-example/gui-example_artefacts/Debug/gui-example",
+         "group": {
             "kind": "none",
             "isDefault": false
-        },
-        "problemMatcher": [],
-        "presentation": {
+         },
+         "problemMatcher": [],
+         "presentation": {
             "echo": false,
             "reveal": "silent",
             "focus": false,
@@ -322,7 +299,7 @@
             "showReuseMessage": false,
             "clear": false,
             "close": true
-        }
-    }
-]
+         }
+      }
+   ]
 }

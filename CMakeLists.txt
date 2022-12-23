@@ -11,6 +11,9 @@ file(STRINGS VERSION CURRENT_VERSION)
 # For simplicity, the name of the project is also the name of the target
 project(${PROJECT_NAME} VERSION ${CURRENT_VERSION})
 
+# Export compile commands to produce a compile_commands.json file that clangd can use
+set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
+
 # Adds all the module sources so they appear correctly in the IDE
 # Must be set before JUCE is added as a sub-dir (or any targets are made)
 # https://github.com/juce-framework/JUCE/commit/6b1b4cf7f6b1008db44411f2c8887d71a3348889

@@ -42,39 +42,55 @@ This is done to ensure that files are accessible both inside and outside the dev
   relax for a few minutes while the dev container image is built (NOTE: this long image build
   normally only occurs the first time the dev container is opened).
 
-### Running The Dev Container
+### Developing In The Dev Container
 
 Once the dev container image is built and Visual Studio Code re-opens, the vscode environment is
 ready to build the code.  Example GUI and (stand-alone) plugin apps are provided in the GUI and
 plugin directories respectively.  These examples were copied directly from the [CMake examples
 supplied with the JUCE library](https://github.com/juce-framework/JUCE/tree/master/examples/CMake).
 
-Build tasks (defined in [.vscode/tasks.json](./.vscode/tasks.json)) are provided that automate
-common steps to configure and build the example projects.  These can be accessed in Visual Studio
-Code by pressing `Ctrl+Shift+B`.  These tasks configure and build code in the repository under a
-`build/` subdirectory created in the repository root.  They include:
+#### Building the Examples
+
+1. Launch the dev container and open the Visual Studio Code **Command Palette** by pressing
+   `Ctrl+Shift+P`.
+2. In the **Command Pallete** text entry, type "CMake", then choose the menu entry titled "Select
+   Variant".
+3. In the subsequent pop-up choice menus, select "Clang for JUCE development", then the desired
+   build configuration ("Debug" is a safe choice for those just getting started).  This will start
+   CMake and configure the build.  Upon finishing, the Output pane in Visual Studio Code will
+   end with the message:
+   `[cmake] -- Build files have been written to: /workspaces/clang-juce-devcontainer/build`
+4. Press `Ctrl+Shift+B` to access a menu of build tasks.  These build tasks (defined in
+   [.vscode/tasks.json](./.vscode/tasks.json)) are provided to automate building the example
+   projects and common targets in the JUCE library.  Select the desired build task and watch as
+   Visual Studio Code begins compiling the associated target(s).
+
+#### Visual Studio Code Build Tasks
+
+All artifacts produced by build tasks are placed under a `build/` subdirectory created in the
+repository root.  Provided build tasks include:
 
 | Build Task | Description |
 |:-----------|:------------|
-| Build all examples         | Configures CMake and builds all examples |
-| Build audio plugin example | Builds the stand-alone plugin example |
-| Build GUI example          | Builds the GUI example |
+| Build examples             | Configures CMake and builds the provided GUI and audio plugin examples |
+| Build audio plugin example | Builds an example stand-alone audio plugin application provided in the audio-plugin-example/ directory |
+| Build GUI example          | Builds an example GUI application provided in the GUI-example/ directory |
 | Build JUCE utilities       | Builds JUCE utilities like the Projucer, AudioPluginHost, and BinaryBuilder |
 | Build all JUCE demos       | Builds all the demos that ship with the JUCE library |
-| Delete build directory     | Deletes the `build/` directory (useful for ensuring a clean build) |
+| Delete build directory     | Deletes all build artifacts (a 'nuclear option' useful for ensuring a clean build) |
 | Configure CMake            | Configures the build using CMake (useful when making CMake changes) |
 
 Additionally, the following tasks are defined in [.vscode/tasks.json](./.vscode/tasks.json) for
-running example projects and JUCE utilities after they have been built.  These can be accessed by
-pressing `Ctrl+Shift+P`, typing/selecting the `*Tasks: Run Task*` option, then clicking on the
-desired "Run XXXX..." task:
+running example projects and JUCE utilities after they have been built.  These can be viewed in the
+Visual Studio Code **Command Palette** (accessed using `Ctrl+Shift+P`) by Executing the
+*Tasks: Run Task* command, then selecting the desired "Run XXXX..." task:
 
 | Task | Description |
 |:-----------|:------------|
-| Run GUI example             | Runs the GUI example built from repo sources |
-| Run audio plugin example    | Runs the audio plugin example built from repo sources (in stand-alone mode) |
-| Run the Projucer            | Runs the Projucer utility supplied with the JUCE library |
-| Run JUCE Audio Plugin Host  | Runs the JUCE audio plugin host supplied with the JUCE library |
+| Run gui-example application          | Runs the GUI example built from repo sources |
+| Run audio-plugin-example application | Runs the audio plugin example built from repo sources (in stand-alone mode) |
+| Run the Projucer                     | Runs the Projucer utility supplied with the JUCE library |
+| Run JUCE Audio Plugin Host           | Runs the JUCE audio plugin host supplied with the JUCE library |
 
 ## Authors
 

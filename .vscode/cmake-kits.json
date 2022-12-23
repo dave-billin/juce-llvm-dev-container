@@ -1,0 +1,9 @@
+[
+   {
+      "name": "Clang for JUCE development",
+      "compilers": {
+         "C": "/usr/bin/clang",
+         "CXX": "/usr/bin/clang++"
+      }
+   }
+]

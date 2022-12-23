@@ -1,35 +1,48 @@
 {
-    "clangd.path": "/usr/bin/clangd-15",
-    "clang-format.executable": "/usr/bin/clang-format-15",
-    "clang-format.language.cpp.enable": true,
-    "clang-format.language.cpp.style": "file",
-    "clang-format.language.c.enable": true,
-    "clang-format.language.c.style": "file",
-    "clang-include-fixer.binary": "/usr/bin/clang-include-fixer-15",
-    "clang-tidy.executable": "/usr/bin/clang-tidy-15",
-    "clang-tidy.buildPath": "${workspaceFolder}/build",
-    "C_Cpp.clang_format_path": "/usr/bin/clang-format-15",
-    "C_Cpp.clang_format_style": "file",
-    "C_Cpp.clang_format_fallbackStyle": "Mozilla",
-    "C_Cpp.codeAnalysis.clangTidy.path": "/usr/bin/clang-tidy-15",
+   "clang-format.executable": "/usr/bin/clang-format-15",
+   "clang-format.language.cpp.enable": true,
+   "clang-format.language.cpp.style": "file",
+   "clang-format.language.c.enable": true,
+   "clang-format.language.c.style": "file",
+   "clang-include-fixer.binary": "/usr/bin/clang-include-fixer-15",
+   "clang-tidy.executable": "/usr/bin/clang-tidy-15",
+   "clang-tidy.buildPath": "${workspaceFolder}/build",
+   "C_Cpp.clang_format_path": "/usr/bin/clang-format-15",
+   "C_Cpp.clang_format_style": "file",
+   "C_Cpp.clang_format_fallbackStyle": "Mozilla",
+   "C_Cpp.codeAnalysis.clangTidy.path": "/usr/bin/clang-tidy-15",
 
-    "cmake.configureOnOpen": false,
-    "cmake.configureOnEdit": false,
+   "cmake.configureOnOpen": false,
+   "cmake.configureOnEdit": false,
+   "cmake.parallelJobs": 4,
+   "cmake.preferredGenerators": [
+      "Ninja",
+      "Unix Makefiles"
+   ],
     
-    "editor.codeActionsOnSave": { "source.fixAll": true },
-    "editor.insertSpaces": true,
-    "editor.formatOnSave": true,
-    "editor.formatOnSaveMode": "modifications",
-    "editor.renderWhitespace": "all",
-    "editor.rulers": [80, 100],
+   "editor.codeActionsOnSave": {
+      "source.fixAll": true
+   },
+   "editor.insertSpaces": true,
+   "editor.formatOnSave": true,
+   "editor.formatOnSaveMode": "modifications",
+   "editor.renderWhitespace": "all",
+   "editor.rulers": [
+      80,
+      100
+   ],
+   "editor.tabSize": 3,
 
-    "terminal.integrated.profiles.linux": {
-        "bash": {
-            "path": "bash",
-            "args": [
-                "-i"
-            ],
-            "icon": "terminal-bash"
-        }
-    }
+   "terminal.integrated.profiles.linux": {
+      "bash": {
+         "path": "bash",
+         "args": [
+            "-i"
+         ],
+         "icon": "terminal-bash"
+      }
+   },
+   "files.associations": {
+      "*.mm": "cpp"
+   },
 }

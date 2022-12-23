@@ -69,6 +69,7 @@ RUN apt-get update \
     cmake \
     doxygen \
     git \
+    ninja-build \
   && apt-get -y autoremove \
   && apt-get -y clean
 
