@@ -176,13 +176,21 @@
             "WebBrowserDemo",
             "WidgetsDemo",
             "WindowsDemo",
-            "XMLandJSONDemo",
+            "XMLandJSONDemo"
          ],
          "group": "build",
          "problemMatcher": [
             "$gcc"
          ],
          "detail": "Build all demo applications supplied with the JUCE library"
+      },
+      {
+         "type": "cmake",
+         "label": "CMake: clean",
+         "command": "clean",
+         "group": "build",
+         "problemMatcher": [],
+         "detail": "Clean up compiled objects"
       },
       {
          "type": "shell",
@@ -205,7 +213,7 @@
          "group": {
             "kind": "build",
             "isDefault": false
-         },
+         }
       },
       {
          "type": "process",
@@ -218,7 +226,7 @@
          "group": {
             "kind": "build",
             "isDefault": false
-         },
+         }
       },
       {
          "type": "shell",
